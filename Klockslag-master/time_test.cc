@@ -27,7 +27,7 @@ TEST_CASE ("Default constructor")
 // the following line will halt the compilation process. Move it
 // one test case at the time and then start creating your own test
 // cases
-#if 0
+//#if 0
 TEST_CASE ( "Constructor with numeric arguments" )
 {
     Time t{12,13,14};
@@ -36,6 +36,7 @@ TEST_CASE ( "Constructor with numeric arguments" )
     CHECK(t.second() == 14);
 }
 
+//#if 0
 TEST_CASE ("Constructor with faulty argument")
 {
     CHECK_THROWS( Time{41,0,0} );
@@ -43,6 +44,7 @@ TEST_CASE ("Constructor with faulty argument")
     CHECK_THROWS( Time{0,0,99} );
 }
 
+#if 0
 TEST_CASE ("String constructor")
 {
     Time t{"12:23:12"};
