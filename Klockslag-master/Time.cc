@@ -47,7 +47,7 @@ string Time::to_string() {
      << extra_0(m_minute) << m_minute
      << extra_0(m_second) << m_second;
   string s{};
-  s << ss;
+  ss >> s;
   return s;
 }
 
