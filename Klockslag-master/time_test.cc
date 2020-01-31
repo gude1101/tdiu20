@@ -7,8 +7,8 @@
 
 using namespace std;
 
-// här lägger ni era testfall. 
-// Jobba enligt TDD; 
+// här lägger ni era testfall.
+// Jobba enligt TDD;
 //  1. Lägg till testfall
 //  2. Testa
 //  3. Lägg till (minsta möjliga) implementation
@@ -44,7 +44,7 @@ TEST_CASE ("Constructor with faulty argument")
     CHECK_THROWS( Time{0,0,99} );
 }
 
-#if 0
+//#if 0
 TEST_CASE ("String constructor")
 {
     Time t{"12:23:12"};
@@ -66,6 +66,7 @@ TEST_CASE ("am or pm")
     CHECK(t2.is_am());
 }
 
+//#if 0
 TEST_CASE ("Convert to string" )
 {
     CHECK( Time{12,12,12}.to_string()     ==    "12:12:12" );
@@ -73,6 +74,7 @@ TEST_CASE ("Convert to string" )
     CHECK( Time{14,33,12}.to_string(true) == "02:33:12 pm" );
 }
 
+#if 0
 TEST_CASE ("Conversion to string" )
 {
     CHECK( string(Time{2,4,1}) == "02:04:01" );
@@ -99,4 +101,3 @@ TEST_CASE ("Output operator" )
     }
 }
 #endif
-
