@@ -74,7 +74,7 @@ TEST_CASE ("Convert to string" )
     CHECK( Time{14,33,12}.to_string(true) == "02:33:12 pm" );
 }
 
-#if 0
+#if 01
 TEST_CASE ("Conversion to string" )
 {
     CHECK( string(Time{2,4,1}) == "02:04:01" );

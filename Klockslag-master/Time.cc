@@ -5,6 +5,8 @@
 
 #include "Time.h"
 
+#include <iostream>
+
 using namespace std;
 
 
@@ -64,19 +66,25 @@ bool Time::is_am() {
 
 string Time::to_string(bool am_pm ) {
   int hour = m_hour;
-  if (am_pm) {
-    hour %= 12;
+  if (am_pm && !is_am()) {
+    hour -= 12;
   }
   stringstream ss{};
   ss << extra_0s(hour) << hour
      << ':'
      << extra_0s(m_minute) << m_minute
      << ':'
-     << extra_0s(m_second) << m_second
-     << ' '
-     << am_pm ? (is_am() ? "am" : "pm") : "";
+     << extra_0s(m_second) << m_second;
+  if (am_pm) {
+    ss << ' ';
+    if (is_am()) {
+      ss << "am";
+    } else {
+      ss << "pm";
+    }
+  }
   string s{};
-  ss >> s;
+  getline(ss, s);
   return s;
 }
 
