@@ -88,4 +88,8 @@ string Time::to_string(bool am_pm ) {
   return s;
 }
 
+Time::operator string() {
+  return to_string();
+}
+
 #endif

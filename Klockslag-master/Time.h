@@ -19,7 +19,7 @@ class Time {
 
   std::string to_string(bool am_pm = false);
 
-  operator std::string
+  operator std::string();
  private:
   int m_hour;
   int m_minute;
