@@ -20,6 +20,14 @@ class Time {
   std::string to_string(bool am_pm = false);
 
   operator std::string();
+  Time operator+(int x);
+  Time operator-(int x);
+
+  Time operator++();
+  Time operator--();
+
+  bool operator<(Time that);
+  bool operator>(Time that);
  private:
   int m_hour;
   int m_minute;

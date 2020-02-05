@@ -74,12 +74,26 @@ TEST_CASE ("Convert to string" )
     CHECK( Time{14,33,12}.to_string(true) == "02:33:12 pm" );
 }
 
-#if 01
+//#if 01
 TEST_CASE ("Conversion to string" )
 {
     CHECK( string(Time{2,4,1}) == "02:04:01" );
 }
 
+TEST_CASE ("Plus / minus") {
+    CHECK((Time{12, 12, 12} + 3600).to_string() == "13:12:12");
+    CHECK((Time{12, 12, 12} + 61).to_string() == "12:13:13");
+    CHECK((Time{12, 12, 12} + 1).to_string() == "12:12:13");
+    CHECK((Time{12, 10, 9} - 61).to_string() == "12:09:08");
+}
+
+TEST_CASE ("< >") {
+  CHECK(Time{10, 10, 10} < Time {10, 10, 9});
+  CHECK(Time{9, 10, 10} > Time{8, 9, 9});
+  CHECK(Time{1,1,1} == Time{1,1,1});
+}
+
+#if 0
 TEST_CASE ("Output operator" )
 {
     stringstream ss;
