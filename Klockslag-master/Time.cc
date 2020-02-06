@@ -51,7 +51,7 @@ Time::Time(string const & s) : m_hour{0}, m_minute{0}, m_second{0} {
 
   validate_params(m_hour, m_minute, m_second);
 }
-
+const
 string extra_0s(int n) {
   if (n < 10) {
     return "0";
@@ -61,11 +61,11 @@ string extra_0s(int n) {
   }
 }
 
-bool Time::is_am() {
+bool Time::is_am() const {
   return m_hour < 12;
 }
 
-string Time::to_string(bool am_pm ) {
+string Time::to_string(bool am_pm ) const {
   int hour = m_hour;
   if (am_pm && !is_am()) {
     hour -= 12;
@@ -89,7 +89,7 @@ string Time::to_string(bool am_pm ) {
   return s;
 }
 
-Time::operator string() {
+Time::operator string() const {
   return to_string();
 }
 
@@ -97,7 +97,7 @@ int real_mod(int a, int b) {
   return ((a%b)+b)%b;
 }
 
-Time Time::operator+(int x) {
+Time Time::operator+(int x) const {
   int seconds = (x + m_second);
   int minutes = ((seconds / 60) + m_minute);
   if (seconds < 0) {
@@ -110,16 +110,30 @@ Time Time::operator+(int x) {
   return Time{real_mod(hours, 24), real_mod(minutes, 60), real_mod(seconds, 60)};
 }
 
-Time Time::operator-(int x) {
+Time Time::operator-(int x) const {
   return (*this)+(-x);
 }
 
-Time Time::operator++() {
-  return (*this)+1;
+Time Time::operator++(int) {
+  Time old = *this;
+  *this = (*this)+1;
+  return old;
 }
 
-Time Time::operator--() {
-  return (*this)-1;
+Time& Time::operator++() {
+  (*this)++;
+  return *this;
+}
+
+Time Time::operator--(int) {
+  Time old = *this;
+  *this = (*this)-1;
+  return old;
+}
+
+Time& Time::operator--() {
+  (*this)--;
+  return *this;
 }
 
 bool Time::operator<(Time that) const {
@@ -146,8 +160,18 @@ bool Time::operator==(Time that) const {
 
 bool Time::operator>(Time that) const {
   return (that<(*this));
+}  stringstream ss{};
+
+
+ostream& operator<<(ostream & lhs, Time const& rhs) {
+  return lhs << rhs.to_string();
 }
 
-
+istream& operator>>(istream & lhs, Time & rhs) {
+  string s;
+  lhs >> s;
+  rhs = Time{s};
+  return lhs;
+}
 
 #endif

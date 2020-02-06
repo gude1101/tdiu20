@@ -15,16 +15,18 @@ class Time {
   int minute() const;
   int second() const;
 
-  bool is_am();
+  bool is_am() const;
 
-  std::string to_string(bool am_pm = false);
+  std::string to_string(bool am_pm = false) const;
 
-  operator std::string();
-  Time operator+(int x);
-  Time operator-(int x);
+  operator std::string() const;
+  Time operator+(int x) const;
+  Time operator-(int x) const;
 
-  Time operator++();
-  Time operator--();
+  Time operator++(int);
+  Time& operator++();
+  Time operator--(int);
+  Time& operator--();
 
   bool operator<(Time that) const;
   bool operator>(Time that) const;
@@ -34,3 +36,6 @@ class Time {
   int m_minute;
   int m_second;
 };
+
+std::ostream& operator <<(std::ostream & lhs, Time const& rhs);
+std::istream& operator >>(std::istream & lhs, Time & rhs);

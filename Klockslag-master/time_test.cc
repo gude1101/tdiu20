@@ -85,15 +85,20 @@ TEST_CASE ("Plus / minus") {
     CHECK((Time{12, 12, 12} + 61).to_string() == "12:13:13");
     CHECK((Time{12, 12, 12} + 1).to_string() == "12:12:13");
     CHECK((Time{12, 10, 9} - 61).to_string() == "12:09:08");
+    CHECK(++Time{12,59,59} == Time{13, 00, 00});
+    CHECK(--Time{12,00,00} == Time{11, 59, 59});
+    Time t = Time{1, 1, 59};
+    t++;
+    CHECK(t == Time{1, 2, 0});
 }
 
-/*TEST_CASE ("< >") {
+TEST_CASE ("< >") {
   CHECK(Time{10, 10, 9} < Time {10, 10, 10});
   CHECK(Time{9, 10, 10} > Time{8, 9, 9});
   CHECK(Time{1,1,1} == Time{1,1,1});
-}*/
+}
 
-#if 0
+#if 01
 TEST_CASE ("Output operator" )
 {
     stringstream ss;
@@ -113,5 +118,12 @@ TEST_CASE ("Output operator" )
         ss << t;
         CHECK(ss.str() == "23:23:23");
     }
+}
+
+TEST_CASE ("Input operator") {
+  stringstream ss;
+  ss << "12:12:12";
+  Time t;
+  CHECK(ss >> t);
 }
 #endif
