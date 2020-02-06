@@ -11,9 +11,9 @@ class Time {
   Time(int h, int m, int s);
   Time(std::string const & s);
 
-  int hour();
-  int minute();
-  int second();
+  int hour() const;
+  int minute() const;
+  int second() const;
 
   bool is_am();
 
@@ -26,8 +26,9 @@ class Time {
   Time operator++();
   Time operator--();
 
-  bool operator<(Time that);
-  bool operator>(Time that);
+  bool operator<(Time that) const;
+  bool operator>(Time that) const;
+  bool operator==(Time that) const;
  private:
   int m_hour;
   int m_minute;

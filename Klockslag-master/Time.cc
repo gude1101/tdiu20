@@ -12,15 +12,15 @@ using namespace std;
 
 
 
-int Time::hour() {
+int Time::hour() const {
   return m_hour;
 }
 
-int Time::minute() {
+int Time::minute() const {
   return m_minute;
 }
 
-int Time::second() {
+int Time::second() const {
   return m_second;
 }
 
@@ -122,7 +122,7 @@ Time Time::operator--() {
   return (*this)-1;
 }
 
-bool Time::operator<(Time that) {
+bool Time::operator<(Time that) const {
   return
   (hour() < that.hour())
   ||
@@ -137,15 +137,17 @@ bool Time::operator<(Time that) {
   );
 }
 
-bool Time::operator==(Time that) {
+bool Time::operator==(Time that) const {
   return
   (hour() == that.hour()) &&
   (minute() == that.minute()) &&
   (second() == that.second());
 }
 
-bool Time::operator>Time that {
+bool Time::operator>(Time that) const {
   return (that<(*this));
 }
+
+
 
 #endif
