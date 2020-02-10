@@ -27,23 +27,19 @@ int Time::second() const {
 Time::Time() : m_hour{0}, m_minute{0}, m_second{0} {
 }
 
-//Kommentar: Det kanske hade varit lite tydligare att kasta ett exception
-//med en kommentar, tex, std::invalid_argument("Felaktig tid");
-//Kommentar: Detta hade också kunnat vara en privat medlemmsfunktion.
-void validate_params(int h, int m, int s) {
+void Time::validate_params() {
+  int h = m_hour;
+  int m = m_minute;
+  int s = m_second;
   if (h < 0 || h > 23
       || m < 0 || m > 59
       || s < 0 || s > 59) {
-    throw std::exception();
+    throw std::invalid_argument("Wrong time format.");
   }
 }
 
-void validate_params(Time & t) {
-  validate_params(t.hour(), t.minute(), t.second());
-}
-
 Time::Time(int h, int m, int s): m_hour{h}, m_minute{m}, m_second{s} {
-  validate_params(*this);
+  validate_params();
 }
 
 Time::Time(string const & s) : m_hour{0}, m_minute{0}, m_second{0} {
@@ -52,7 +48,7 @@ Time::Time(string const & s) : m_hour{0}, m_minute{0}, m_second{0} {
   char c;
   ss >> m_hour >> c >> m_minute >> c >> m_second;
 
-  validate_params(m_hour, m_minute, m_second);
+  validate_params();
 }
 const
 string extra_0s(int n) {
@@ -90,9 +86,7 @@ string Time::to_string(bool am_pm ) const {
 
   //Kommentar: stringstream har en funktion som heter str()
   //Ni hade kunnat skriva "return ss.str();"
-  string s{};
-  getline(ss, s);
-  return s;
+  return ss.str();
 }
 
 Time::operator string() const {
@@ -100,7 +94,7 @@ Time::operator string() const {
 }
 
 //Kommentar: Detta hade också kunnat vara en privat medlemmsfunktion.
-int real_mod(int a, int b) {
+int Time::real_mod(int a, int b) const {
   return ((a%b)+b)%b;
 }
 
@@ -114,7 +108,7 @@ Time Time::operator+(int x) const {
   if (minutes < 0) {
     hours--;
   }
-  return Time{real_mod(hours, 24), real_mod(minutes, 60), real_mod(seconds, 60)};
+  return Time{(*this).real_mod(hours, 24), (*this).real_mod(minutes, 60), (*this).real_mod(seconds, 60)};
 }
 
 Time Time::operator-(int x) const {
@@ -145,15 +139,13 @@ Time& Time::operator--() {
 
 //TODO: Den här funktionen är väldigt svårt att läsa. Försök att fixa till den
 // så att den blir lättare att förstå.
+
+// Kanske fixat nu?
 bool Time::operator<(Time that) const {
   return
-  (hour() < that.hour())
-  ||
-  (
+  (hour() < that.hour()) || (
     (hour() == that.hour()) && (
-      (minute() < that.minute())
-      ||
-      (
+      (minute() < that.minute()) || (
         (minute() == that.minute()) && (second() < that.second())
       )
     )
@@ -169,8 +161,7 @@ bool Time::operator==(Time that) const {
 
 bool Time::operator>(Time that) const {
   return (that<(*this));
-}  stringstream ss{};
-//TODO: Varför är det en stringstream här? ^
+}
 
 ostream& operator<<(ostream & lhs, Time const& rhs) {
   return lhs << rhs.to_string();
@@ -180,7 +171,11 @@ ostream& operator<<(ostream & lhs, Time const& rhs) {
 istream& operator>>(istream & lhs, Time & rhs) {
   string s;
   lhs >> s;
-  rhs = Time{s};
+  try {
+    rhs = Time{s};
+  } catch (invalid_argument exception) {
+    lhs.setstate(std::ios::failbit);
+  }
   return lhs;
 }
 
