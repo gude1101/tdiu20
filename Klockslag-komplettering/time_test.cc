@@ -81,18 +81,24 @@ TEST_CASE ("Conversion to string" )
 }
 
 //TODO: Testa också att +/- operatorn klarar av sekunder > 86400 (över en dag).
-//TODO: Ni testar inte post decrement operatorn.
-//TODO: Se också till att testa post delen av dec/inc operatorerna.
 TEST_CASE ("Plus / minus") {
+    CHECK((Time{10, 10, 10} + 86460).to_string() == "10:11:10");
     CHECK((Time{12, 12, 12} + 3600).to_string() == "13:12:12");
     CHECK((Time{12, 12, 12} + 61).to_string() == "12:13:13");
     CHECK((Time{12, 12, 12} + 1).to_string() == "12:12:13");
     CHECK((Time{12, 10, 9} - 61).to_string() == "12:09:08");
+
     CHECK(++Time{12,59,59} == Time{13, 00, 00});
     CHECK(--Time{12,00,00} == Time{11, 59, 59});
+
     Time t = Time{1, 1, 59};
     t++;
     CHECK(t == Time{1, 2, 0});
+    t--;
+    CHECK(t == Time{1, 1, 59});
+
+    CHECK((Time{12, 10, 9}--) == Time{12, 10, 9});
+    CHECK((Time{12, 10, 9}++) == Time{12, 10, 9});
 }
 
 TEST_CASE ("< >") {
@@ -130,6 +136,26 @@ TEST_CASE ("Input operator") {
   stringstream ss;
   ss << "12:12:12";
   Time t;
-  CHECK(ss >> t);
+  ss >> t;
+  CHECK(t.to_string() == "12:12:12");
+
+  SECTION ("Chained input") {
+      stringstream ss;
+      int n;
+      float f;
+      ss << "5 12:12:12 3.14";
+      CHECK(ss.str() == "5 12:12:12 3.14");
+      ss >> n >> t >> f;
+      CHECK(n == 5);
+      CHECK(t.to_string() == "12:12:12");
+      CHECK(f == 3.14f);
+  }
+
+  SECTION("Fail flag") {
+    CHECK(ss.fail() == false);
+    ss << "12:12:60";
+    ss >> t;
+    CHECK(ss.fail() == true);
+  }
 }
 #endif
