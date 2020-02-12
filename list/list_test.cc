@@ -3,7 +3,7 @@
 #include <sstream>
 
 #include "catch.hpp"
-#include "Time.h"
+#include "Sorted_list.h"
 
 using namespace std;
 
@@ -15,9 +15,9 @@ using namespace std;
 //  4. Testa alla testfall
 //  5. Refaktorera (skriv om) så att allt ser bra ut
 
-#if 0
-TEST_CASE ("")
+#if 01
+TEST_CASE ("Constructor")
 {
-    
+    Sorted_list sl = Sorted_list{};
 }
 #endif
