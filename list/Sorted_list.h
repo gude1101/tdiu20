@@ -1,11 +1,27 @@
+#include <iostream>
+#include <string>
+
 class Sorted_list {
 public:
-  Sorted_list(int const items...) {}
-private:
-  class Node {
+  struct Node {
     int value;
     Node* next;
+    Node* previous;
   };
-  Node _first;
-  Node _last;
+
+  Node* first();
+  Node* last();
+
+  void add(int n);
+  void remove(int n);
+
+  Sorted_list();
+  Sorted_list(std::initializer_list<int> l);
+
+  std::string to_string();
+private:
+  Node* _first;
+  Node* sentinel;
 };
+
+std::ostream& operator<<(std::ostream& os, Sorted_list sl);

@@ -45,8 +45,14 @@ Time::Time(int h, int m, int s): m_hour{h}, m_minute{m}, m_second{s} {
 Time::Time(string const & s) : m_hour{0}, m_minute{0}, m_second{0} {
   stringstream ss{};
   ss << s;
-  char c;
-  ss >> m_hour >> c >> m_minute >> c >> m_second;
+  char ca;
+  char cb;
+
+  ss >> m_hour >> ca >> m_minute >> cb >> m_second;
+
+  if (ca != ':' || cb != ':') {
+    throw std::invalid_argument("Wrong time format.");
+  }
 
   validate_params();
 }
@@ -84,8 +90,6 @@ string Time::to_string(bool am_pm ) const {
     }
   }
 
-  //Kommentar: stringstream har en funktion som heter str()
-  //Ni hade kunnat skriva "return ss.str();"
   return ss.str();
 }
 
@@ -136,20 +140,19 @@ Time& Time::operator--() {
   return *this;
 }
 
-//TODO: Den här funktionen är väldigt svårt att läsa. Försök att fixa till den
-// så att den blir lättare att förstå.
-
-// Kanske fixat nu?
 bool Time::operator<(Time that) const {
-  return
-  (hour() < that.hour()) || (
-    (hour() == that.hour()) && (
-      (minute() < that.minute()) || (
-        (minute() == that.minute()) &&
-        (second() < that.second())
-      )
-    )
-  );
+  if (hour () < that.hour()) {
+    return true;
+  } else if (hour() > that.hour()) {
+    return false;
+  } else if (minute() < that.minute()) {
+    return true;
+  } else if (minute() > that.minute()) {
+    return false;
+  } else if (second() < that.second()) {
+    return true;
+  }
+  return false;
 }
 
 bool Time::operator==(Time that) const {
@@ -167,8 +170,6 @@ ostream& operator<<(ostream & lhs, Time const& rhs) {
   return lhs << rhs.to_string();
 }
 
-//TODO: Om användaren matar in ett felaktigt värde ska fail flaggan sättas.
-// Fortfarande inte fixat för tex "12:12:#"
 istream& operator>>(istream & lhs, Time & rhs) {
   string s;
   lhs >> s;
