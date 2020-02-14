@@ -21,7 +21,7 @@ public:
   std::string to_string();
 private:
   Node* _first;
-  Node* sentinel;
+  Node* _sentinel;
 };
 
 std::ostream& operator<<(std::ostream& os, Sorted_list sl);
