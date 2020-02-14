@@ -1,11 +1,26 @@
+#include <iostream>
+
+//#define abstract 0
+
 class Sorted_list {
 public:
-  Sorted_list(int const items...) {}
-private:
-  class Node {
+  struct Node {
     int value;
     Node* next;
   };
-  Node _first;
-  Node _last;
+
+  Sorted_list(int const items...) {};
+
+  Node* first();
+  Node* last();
+
+  void add(int n);
+  void remove(int n);
+
+private:  
+  Node* _first;
+  Node* _last;
+  
 };
+
+std::ostream operator<<(std::ostream & os, Sorted_list & sl);
