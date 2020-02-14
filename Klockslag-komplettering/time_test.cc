@@ -80,13 +80,13 @@ TEST_CASE ("Conversion to string" )
     CHECK( string(Time{2,4,1}) == "02:04:01" );
 }
 
-//TODO: Testa också att +/- operatorn klarar av sekunder > 86400 (över en dag).
 TEST_CASE ("Plus / minus") {
     CHECK((Time{10, 10, 10} + 86460).to_string() == "10:11:10");
     CHECK((Time{12, 12, 12} + 3600).to_string() == "13:12:12");
     CHECK((Time{12, 12, 12} + 61).to_string() == "12:13:13");
     CHECK((Time{12, 12, 12} + 1).to_string() == "12:12:13");
     CHECK((Time{12, 10, 9} - 61).to_string() == "12:09:08");
+    CHECK((Time{10, 10, 10} - 86460).to_string() == "10:09:10");
 
     CHECK(++Time{12,59,59} == Time{13, 00, 00});
     CHECK(--Time{12,00,00} == Time{11, 59, 59});
@@ -129,9 +129,6 @@ TEST_CASE ("Output operator" )
     }
 }
 
-//TODO: Här ska ni också testa så att failflaggan sätts.
-// (Se kommentaren till input operatorn).
-//TODO: Ni ska också testa så att chained input fungerar.
 TEST_CASE ("Input operator") {
   stringstream ss;
   ss << "12:12:12";
@@ -152,10 +149,15 @@ TEST_CASE ("Input operator") {
   }
 
   SECTION("Fail flag") {
-    CHECK(ss.fail() == false);
-    ss << "12:12:60";
+    CHECK(!ss.fail());
+    ss << "12:12:";
     ss >> t;
-    CHECK(ss.fail() == true);
+    CHECK(ss.fail());
+
+    ss = stringstream{};
+    ss << "12:--:--";
+    ss >> t;
+    CHECK(ss.fail());
   }
 }
 #endif
