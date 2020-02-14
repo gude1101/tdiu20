@@ -131,7 +131,6 @@ TEST_CASE ("Output operator" )
 
 //TODO: Här ska ni också testa så att failflaggan sätts.
 // (Se kommentaren till input operatorn).
-//TODO: Ni ska också testa så att chained input fungerar.
 TEST_CASE ("Input operator") {
   stringstream ss;
   ss << "12:12:12";
@@ -152,10 +151,16 @@ TEST_CASE ("Input operator") {
   }
 
   SECTION("Fail flag") {
-    CHECK(ss.fail() == false);
+    CHECK(!ss.fail());
     ss << "12:12:60";
     ss >> t;
-    CHECK(ss.fail() == true);
+    CHECK(ss.fail());
+
+    ss = stringstream{};
+    ss << "-----";
+    CHECK(!ss.fail());
+    ss >> t;
+    CHECK(ss.fail());
   }
 }
 #endif

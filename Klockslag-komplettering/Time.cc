@@ -93,7 +93,6 @@ Time::operator string() const {
   return to_string();
 }
 
-//Kommentar: Detta hade också kunnat vara en privat medlemmsfunktion.
 int Time::real_mod(int a, int b) const {
   return ((a%b)+b)%b;
 }
@@ -146,7 +145,8 @@ bool Time::operator<(Time that) const {
   (hour() < that.hour()) || (
     (hour() == that.hour()) && (
       (minute() < that.minute()) || (
-        (minute() == that.minute()) && (second() < that.second())
+        (minute() == that.minute()) &&
+        (second() < that.second())
       )
     )
   );
@@ -168,12 +168,13 @@ ostream& operator<<(ostream & lhs, Time const& rhs) {
 }
 
 //TODO: Om användaren matar in ett felaktigt värde ska fail flaggan sättas.
+// Fortfarande inte fixat för tex "12:12:#"
 istream& operator>>(istream & lhs, Time & rhs) {
   string s;
   lhs >> s;
   try {
     rhs = Time{s};
-  } catch (invalid_argument exception) {
+  } catch (exception e) {
     lhs.setstate(std::ios::failbit);
   }
   return lhs;
