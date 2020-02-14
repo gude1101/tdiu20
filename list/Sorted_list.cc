@@ -2,30 +2,71 @@
 
 using namespace std;
 
-Sorted_list::Sorted_list(int const items...) : _first{&(Sorted_list::Node{})}, _last{_first} {
+#define INT_MAX 2147483647
 
+Sorted_list::Sorted_list(std::initializer_list<int> il) : _sentinel{new Node{}}, _first{nullptr} {
+  _sentinel->previous = nullptr;
+  _sentinel->next = nullptr;
+  _sentinel->value = INT_MAX;
+
+  for (int e : il) {
+    add(e);
+  }
 }
 
-Sorted_list::first() {
-    return _first;
+Sorted_list::Node * Sorted_list::first() {
+  return _first;
 }
 
-Sorted_list::last() {
-    return _last;
+Sorted_list::Node * Sorted_list::last() {
+  return _sentinel->previous;
 }
 
-Sorted_list::remove(int n) {
-    for (Sorted_list::Node* it =  sl.first(); it != sl.last(); it = (*it).next) {
-        if (((*((*it).next)).value) == n) {
-            (*it).next
-        }
+void Sorted_list::add(int n) {
+  for (auto it = _first; it != _sentinel; it = it->next) {
+    if (it->value > n || it == _sentinel) {
+
+      Node* n = new Node{};
+      n->previous = it->previous;
+      if (it != _first) {
+        n->previous->next = n;
+      } else {
+        _first = n;
+      }
+      it->previous = n;
+      n->next = it;
+
+      return;
     }
+  }
 }
 
-ostream operator<<(ostream & os, Sorted_list & sl) {
-    Sorted_list::Node* it = sl.first();
-    os << (*it).value;
-    for (it =  (*it).next; it != sl.last(); it = (*it).next) {
-        os << ', ' << (*it).value;
+void Sorted_list::remove(int n) {
+  for (auto it = _first; it != _sentinel; it = it->next) {
+    if ( it->value == n) {
+
+      it->previous->next = it->next;
+      it->next->previous = it->previous;
+
+      delete it;
+
+      return;
     }
+  }
+}
+
+std::ostream& operator<<(ostream& os, Sorted_list sl) {
+  for (auto it = sl.first(); it != sl.last()->previous; it = it->next) {
+    os << it->value << ", ";
+  }
+  os << sl.last();
+
+  return os;
+}
+
+string Sorted_list::to_string() {
+  stringstream& ss{};
+  ss << (*this);
+  
+  return ss.str();
 }

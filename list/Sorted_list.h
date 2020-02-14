@@ -1,15 +1,13 @@
 #include <iostream>
-
-//#define abstract 0
+#include <string>
 
 class Sorted_list {
 public:
   struct Node {
     int value;
     Node* next;
+    Node* previous;
   };
-
-  Sorted_list(int const items...) {};
 
   Node* first();
   Node* last();
@@ -17,10 +15,13 @@ public:
   void add(int n);
   void remove(int n);
 
-private:  
+  Sorted_list();
+  Sorted_list(std::initializer_list<int> l);
+
+  std::string to_string();
+private:
   Node* _first;
-  Node* _last;
-  
+  Node* _sentinel;
 };
 
-std::ostream operator<<(std::ostream & os, Sorted_list & sl);
+std::ostream& operator<<(std::ostream& os, Sorted_list sl);
