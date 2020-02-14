@@ -4,7 +4,7 @@ using namespace std;
 
 #define INT_MAX 2147483647
 
-Sorted_list::Sorted_list(std::initializer_list<int> il) : _sentinel{new Node{}}, _first{nullptr} {
+Sorted_list::Sorted_list(std::initializer_list<int> il) : _sentinel{new Node{}}, _first{_sentinel} {
   _sentinel->previous = nullptr;
   _sentinel->next = nullptr;
   _sentinel->value = INT_MAX;
@@ -23,7 +23,7 @@ Sorted_list::Node * Sorted_list::last() {
 }
 
 void Sorted_list::add(int n) {
-  for (auto it = _first; it != _sentinel; it = it->next) {
+  for (auto it = first(); it != _sentinel; it = it->next) {
     if (it->value > n || it == _sentinel) {
 
       Node* n = new Node{};
@@ -42,7 +42,7 @@ void Sorted_list::add(int n) {
 }
 
 void Sorted_list::remove(int n) {
-  for (auto it = _first; it != _sentinel; it = it->next) {
+  for (auto it = first(); it != _sentinel; it = it->next) {
     if ( it->value == n) {
 
       it->previous->next = it->next;
