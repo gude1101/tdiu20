@@ -16,8 +16,8 @@ using namespace std;
 //  5. Refaktorera (skriv om) så att allt ser bra ut
 
 #if 0
-TEST_CASE ("")
+TEST_CASE ("Constructors")
 {
-    
+
 }
 #endif
