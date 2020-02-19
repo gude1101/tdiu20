@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <string>
 
 class Sorted_list {
@@ -15,7 +16,7 @@ public:
   void add(int n);
   void remove(int n);
 
-  Sorted_list();
+  //Sorted_list();
   Sorted_list(std::initializer_list<int> l);
 
   std::string to_string();

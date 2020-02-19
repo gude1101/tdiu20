@@ -2,7 +2,9 @@
 
 using namespace std;
 
+#ifndef INT_MAX
 #define INT_MAX 2147483647
+#endif
 
 Sorted_list::Sorted_list(std::initializer_list<int> il) : _sentinel{new Node{}}, _first{_sentinel} {
   _sentinel->previous = nullptr;
@@ -65,7 +67,7 @@ std::ostream& operator<<(ostream& os, Sorted_list sl) {
 }
 
 string Sorted_list::to_string() {
-  stringstream& ss{};
+  stringstream ss{};
   ss << (*this);
   
   return ss.str();
