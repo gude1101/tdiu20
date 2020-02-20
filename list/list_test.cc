@@ -16,16 +16,27 @@ using namespace std;
 //  5. Refaktorera (skriv om) så att allt ser bra ut
 
 #if 01
-TEST_CASE ("Stuff")
+
+TEST_CASE("Empty constructor")
 {
-    Sorted_list sl = Sorted_list{};
+    Sorted_list sl{};
     CHECK(sl.to_string() == "");
+}
 
-    sl = Sorted_list{1, 6000, -200, 3};
+TEST_CASE("Long constructor") {
+    Sorted_list sl{1, 6000, -200, 3};
     CHECK(sl.to_string() == "-200, 1, 3, 6000");
+}
 
+TEST_CASE("First & last") {
+    Sorted_list sl{1, 6000, -200, 3};
+    cerr << "got here" << endl;
     CHECK(sl.first()->value == -200);
     CHECK(sl.last()->value == 6000);
+}
+
+TEST_CASE("Add & remove") {
+    Sorted_list sl{1, 6000, -200, 3};
 
     sl.add(-300);
     CHECK(sl.first()->value == -300);
