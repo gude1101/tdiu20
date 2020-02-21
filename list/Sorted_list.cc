@@ -6,6 +6,8 @@ using namespace std;
 #define INT_MAX 2147483647
 #endif
 
+// TODO: ta bort alla cerr<< när buggar är fixade
+
 Sorted_list::Sorted_list(std::initializer_list<int> il) : _first{nullptr}, _sentinel{new Sorted_list::Node{}} {
   cerr<<"A";
   _sentinel->previous = _first;
@@ -19,52 +21,83 @@ Sorted_list::Sorted_list(std::initializer_list<int> il) : _first{nullptr}, _sent
   }
 }
 
-Sorted_list::Node * Sorted_list::first() {
-  return _first == _sentinel ? nullptr : _first;
-}
-
-Sorted_list::Node * Sorted_list::last() {
-  return _sentinel->previous;
-}
-
-void connect(Sorted_list::Node* before, Sorted_list::Node* after) {
-  if (before != nullptr) {
-    before->next = after;
-  }
-  if (after != nullptr) {
-    after->previous = before;
+int* Sorted_list::Node::value_or_null(Node* n) {
+  if (n == nullptr) {
+    return nullptr;
+  } else {
+    return &(n->value);
   }
 }
 
-void insert(Sorted_list::Node* before, Sorted_list::Node* n, Sorted_list::Node* after) {
-  connect(before, n);
-  connect(n, after);
+int* Sorted_list::first() {
+  return Node::value_or_null(_first);
 }
 
-void insert(Sorted_list::Node* before, int n, Sorted_list::Node* after) {
+int* Sorted_list::last() {
+  return Node::value_or_null(_sentinel->previous);
+}
+
+bool Sorted_list::is_empty() {
+  return first() == nullptr;
+}
+
+void Sorted_list::update_first() {
+  // loop backwards
+  for (Node* n = _sentinel; n != nullptr; n = n->previous) {
+    _first = n;
+  }
+}
+
+void Sorted_list::Node::connect(Sorted_list::Node* a, Sorted_list::Node* b) {
+  if (a == nullptr || a->value < b->value) {
+    if (a != nullptr) {
+      a->next = b;
+    }
+    if (b != nullptr) {
+      b->previous = a;
+    }
+  } else {
+    connect(b, a);
+  }
+}
+
+/*void Sorted_list::insert(Sorted_list::Node* before, Sorted_list::Node* n, Sorted_list::Node* after) {
+  Node::connect(before, n);
+  Node::connect(n, after);
+  update_first();
+}*/
+
+/*void Sorted_list::insert(Sorted_list::Node* before, int n, Sorted_list::Node* after) {
   Sorted_list::Node* nn = new Sorted_list::Node{};
   nn->value = n;
   insert(after, nn, before);
-}
+}*/
 
-void insert_unordered(int n, Sorted_list::Node* a, Sorted_list::Node* b) {
-  if (a->value < b->value) {
-    insert(a, n, b);;
+Sorted_list::Node* Sorted_list::insert(int n, Sorted_list::Node* a, Sorted_list::Node* b) {
+  if (a == nullptr || a->value < b->value) {
+    Sorted_list::Node* nn{};
+    nn->value = n;
+
+    Node::connect(a, nn);
+    Node::connect(nn, b);
+
+    update_first();
+
+    return nn;
   } else {
-    insert(b, n, a);
+    return insert(n, b, a);
   }
 }
 
 void Sorted_list::add(int n) {
-  if (first() == nullptr) {
-    insert(nullptr, n, _sentinel);
-    _first = _sentinel->previous;
+  if (is_empty()) {
+    _first = insert(n, nullptr, _sentinel);
 
     return;
   }
-  for (auto it = first(); it != _sentinel; it = it->next) {
+  for (auto it = _first; it != _sentinel; it = it->next) {
     if (it->value > n || it == _sentinel) {
-      insert_unordered(n, it, it->previous);
+      insert(n, it, it->previous);
       /*
       Node* n = new Node{};
       n->previous = it->previous;
@@ -82,14 +115,12 @@ void Sorted_list::add(int n) {
 }
 
 void Sorted_list::remove(int n) {
-  for (auto it = first(); it != _sentinel; it = it->next) {
-    if ( it->value == n) {
+  for (auto it = _first; it != _sentinel; it = it->next) {
+    if ( it->value == n ) {
 
-      connect(it->previous, it->next);
+      Node::connect(it->previous, it->next);
 
-      if (_first == it) {
-        _first = it->next;
-      }
+      update_first();
 
       delete it;
 
@@ -98,16 +129,30 @@ void Sorted_list::remove(int n) {
   }
 }
 
+int* Sorted_list::operator[](int i) {
+  int j = 0;
+  for (auto n = _first; n != _sentinel; n = n->next) {
+    if (j++ == i) {
+      return &(n->value);
+    }
+  }
+
+  return nullptr;
+}
+
 std::ostream& operator<<(ostream& os, Sorted_list sl) {
-  if (sl.last() != nullptr) {
-    bool one_element = sl.last()->previous == nullptr;
+  if (!sl.is_empty()) {
+    os << sl.first();
+    bool one_element = sl.first() == sl.last();
     if (!one_element) {
-      for (auto it = sl.first(); it != sl.last()->previous; it = it->next) {
-        os << it->value << ", ";
+      // Eftersom node måste vara private blir det den här långsamma loopen istället :/
+      for (int i = 0;; i++) {
+        if (sl[i] == nullptr) {
+          break;
+        }
+        os << ',' << sl[i];
       }
     }
-
-    os << sl.last();
   }
 
   return os;

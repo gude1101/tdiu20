@@ -31,15 +31,16 @@ TEST_CASE("Long constructor") {
 TEST_CASE("First & last") {
     Sorted_list sl{1, 6000, -200, 3};
     cerr << "got here" << endl;
-    CHECK(sl.first()->value == -200);
-    CHECK(sl.last()->value == 6000);
+    CHECK(*sl.first() == -200);
+    cerr<<"got here 2";
+    CHECK(*sl.last() == 6000);
 }
 
 TEST_CASE("Add & remove") {
     Sorted_list sl{1, 6000, -200, 3};
 
     sl.add(-300);
-    CHECK(sl.first()->value == -300);
+    CHECK(*sl.first() == -300);
 
     sl.remove(3);
     CHECK(sl.to_string() == "-300, -200, 1, 6000");
