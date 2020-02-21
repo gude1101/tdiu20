@@ -20,19 +20,17 @@ using namespace std;
 TEST_CASE("Empty constructor")
 {
     Sorted_list sl{};
-    CHECK(sl.to_string() == "");
+    CHECK(sl.to_string() == "[]");
 }
 
 TEST_CASE("Long constructor") {
     Sorted_list sl{1, 6000, -200, 3};
-    CHECK(sl.to_string() == "-200, 1, 3, 6000");
+    CHECK(sl.to_string() == "[-200, 1, 3, 6000]");
 }
 
 TEST_CASE("First & last") {
     Sorted_list sl{1, 6000, -200, 3};
-    cerr << "got here" << endl;
     CHECK(*sl.first() == -200);
-    cerr<<"got here 2";
     CHECK(*sl.last() == 6000);
 }
 
@@ -43,6 +41,6 @@ TEST_CASE("Add & remove") {
     CHECK(*sl.first() == -300);
 
     sl.remove(3);
-    CHECK(sl.to_string() == "-300, -200, 1, 6000");
+    CHECK(sl.to_string() == "[-300, -200, 1, 6000]");
 }
 #endif

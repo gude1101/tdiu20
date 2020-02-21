@@ -9,16 +9,16 @@ using namespace std;
 // TODO: ta bort alla cerr<< när buggar är fixade
 
 Sorted_list::Sorted_list(std::initializer_list<int> il) : _first{nullptr}, _sentinel{new Sorted_list::Node{}} {
-  cerr<<"A";
   _sentinel->previous = _first;
   _sentinel->next = nullptr;
   _sentinel->value = INT_MAX;
-  cerr<<"B";
 
+  cerr<<"New list. ";
   for (int e : il) {
-    cerr<<"loop";
     add(e);
+    cerr << "List is now: " << (*this) << ". ";
   }
+  cerr<<"New list done. ";
 }
 
 int* Sorted_list::Node::value_or_null(Node* n) {
@@ -74,8 +74,8 @@ void Sorted_list::Node::connect(Sorted_list::Node* a, Sorted_list::Node* b) {
 }*/
 
 Sorted_list::Node* Sorted_list::insert(int n, Sorted_list::Node* a, Sorted_list::Node* b) {
-  if (a == nullptr || a->value < b->value) {
-    Sorted_list::Node* nn{};
+  if (b != nullptr && (a == nullptr || a->value < b->value)) {
+    Sorted_list::Node* nn = new Node{};
     nn->value = n;
 
     Node::connect(a, nn);
@@ -89,15 +89,32 @@ Sorted_list::Node* Sorted_list::insert(int n, Sorted_list::Node* a, Sorted_list:
   }
 }
 
+bool Sorted_list::contains(int n) {
+  for (Node* it = _first; it != nullptr; it = it->next) {
+    if (it->value == n) {
+      return true;
+    }
+  }
+  return false;
+}
+
 void Sorted_list::add(int n) {
+  cerr<<"Adding "<<n<<". ";
+  if (contains(n)) {
+    cerr << "List contains it already. ";
+    return;
+  }
   if (is_empty()) {
+    cerr << "It is first. ";
     _first = insert(n, nullptr, _sentinel);
 
     return;
   }
-  for (auto it = _first; it != _sentinel; it = it->next) {
+  for (auto it = _first;; it = it->next) {
     if (it->value > n || it == _sentinel) {
+      cerr << n <<  " < " << it-> value << ". ";
       insert(n, it, it->previous);
+      cerr << "Add done. ";
       /*
       Node* n = new Node{};
       n->previous = it->previous;
@@ -111,7 +128,9 @@ void Sorted_list::add(int n) {
       */
       return;
     }
+    cerr << n << " > " << it->value << ". ";
   }
+  cerr << "Error. ";
 }
 
 void Sorted_list::remove(int n) {
@@ -141,20 +160,23 @@ int* Sorted_list::operator[](int i) {
 }
 
 std::ostream& operator<<(ostream& os, Sorted_list sl) {
+  os << '[';
+
   if (!sl.is_empty()) {
-    os << sl.first();
+    os << *sl.first();
     bool one_element = sl.first() == sl.last();
     if (!one_element) {
       // Eftersom node måste vara private blir det den här långsamma loopen istället :/
-      for (int i = 0;; i++) {
+      for (int i = 1;; i++) {
         if (sl[i] == nullptr) {
           break;
         }
-        os << ',' << sl[i];
+        os << ", " << *sl[i];
       }
     }
   }
 
+  os << ']';
   return os;
 }
 

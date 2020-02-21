@@ -33,6 +33,8 @@ public:
   int* first();// första värdet (nullptr om listan är tom)
   int* last(); // sista värdet
 
+  bool contains(int n);
+
   void add(int n);
   void remove(int n);
 
