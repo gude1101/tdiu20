@@ -16,6 +16,9 @@ public:
   void add(int n);
   void remove(int n);
 
+  // TODO
+  //int operator[](int i);
+
   //Sorted_list();
   Sorted_list(std::initializer_list<int> l);
 

@@ -15,8 +15,8 @@ using namespace std;
 //  4. Testa alla testfall
 //  5. Refaktorera (skriv om) så att allt ser bra ut
 
-#if 01
-TEST_CASE ("Stuff")
+#if 1
+TEST_CASE("Stuff")
 {
     Sorted_list sl = Sorted_list{};
     CHECK(sl.to_string() == "");
