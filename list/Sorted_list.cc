@@ -30,12 +30,14 @@ int* Sorted_list::Node::value_or_null(Node* n) {
 }
 
 //Sorted_list::Node::Node(int val) : value{val}, next{nullptr}, previous{nullptr} {}
-/*
+
 Sorted_list::Node* Sorted_list::Node::new_sentinel() {
-  return new Node(INT_MAX);
+  Node* n = new Node{};
+  n->value = INT_MAX;
+  return n;
 }
 
-Sorted_list::Sorted_list(Sorted_list const & that) : _first{nullptr}, _sentinel{Node::new_sentinel()} {
+Sorted_list::Sorted_list(Sorted_list const & that) noexcept : _first{nullptr}, _sentinel{Node::new_sentinel()} {
   *this = that;
 }
 
@@ -46,7 +48,7 @@ Sorted_list& Sorted_list::operator=(Sorted_list that) {
   }
 
   return *this;
-}*/
+}
 
 Sorted_list::~Sorted_list() {
   clear();
@@ -88,7 +90,8 @@ void Sorted_list::Node::connect(Sorted_list::Node* a, Sorted_list::Node* b) {
 Sorted_list::Node* Sorted_list::insert(int n, Sorted_list::Node* a, Sorted_list::Node* b) {
   // Garantera storleksordning.
   if (b != nullptr && (a == nullptr || a->value <= b->value)) {
-    Sorted_list::Node* nn = new Node{n};
+    Sorted_list::Node* nn = new Node{};
+    nn->value = n;
 
     Node::connect(a, nn);
     Node::connect(nn, b);
