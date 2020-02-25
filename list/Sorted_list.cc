@@ -137,15 +137,13 @@ void Sorted_list::add(int n) {
 
 void Sorted_list::remove(int n) {
   for (auto it = _first; it != _sentinel; it = it->next) {
-    // delete prev, because deleting it causes loop to break.
-    auto prev = it->previous;
-    if ( prev != nullptr && prev->value == n ) {
+    if ( it->value == n ) {
 
-      Node::connect(prev->previous, prev->next);
+      Node::connect(it->previous, it->next);
 
       update_first();
 
-      delete prev;
+      delete it;
 
       return;
     }
