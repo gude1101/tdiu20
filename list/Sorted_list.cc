@@ -54,6 +54,7 @@ Sorted_list::~Sorted_list() {
   clear();
 }
 
+
 int* Sorted_list::first() {
   return Node::value_or_null(_first);
 }
