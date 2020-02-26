@@ -41,7 +41,7 @@ Sorted_list::Sorted_list(Sorted_list const & that) noexcept : _first{nullptr}, _
   *this = that;
 }
 
-Sorted_list& Sorted_list::operator=(Sorted_list that) {
+Sorted_list& Sorted_list::operator=(Sorted_list const & that) {
   clear();
   for (int i = 0; i < that.size(); i++) {
     add(that[i]);
@@ -68,7 +68,8 @@ bool Sorted_list::is_empty() {
 
 void Sorted_list::update_first() {
   // loop backwards
-  for (Node* n = _sentinel; n != nullptr; n = n->previous) {
+  _first = nullptr;
+  for (Node* n = _sentinel->previous; n != nullptr; n = n->previous) {
     _first = n;
   }
 }
@@ -160,7 +161,7 @@ void Sorted_list::clear() {
   }
 }
 
-int Sorted_list::operator[](int i) {
+int Sorted_list::operator[](int i) const {
   int j = 0;
   for (auto n = _first; n != _sentinel; n = n->next) {
     if (j++ == i) {
@@ -171,7 +172,7 @@ int Sorted_list::operator[](int i) {
   throw out_of_range{"i"};
 }
 
-int Sorted_list::size() {
+int Sorted_list::size() const {
   int i{};
   for (auto it = _first; it != _sentinel; it = it->next) {
     i++;
@@ -180,27 +181,29 @@ int Sorted_list::size() {
 }
 
 std::ostream& operator<<(ostream& os, Sorted_list sl) {
+  cerr << "\nA";
   os << sl.to_string();
+  cerr << "\nB";
   return os;
 }
 
 string Sorted_list::to_string() {
-  stringstream os{};
+  stringstream ss{};
 
-  os << '[';
+  ss << '[';
 
   if (!is_empty()) {
-    os << *first();
+    ss << *first();
     bool one_element = first() == last();
     // Bara kommatecken om fler än ett element
     if (!one_element) {
       for (auto it = _first->next; it != _sentinel; it = it->next) {
-        os << ", " << it->value;
+        ss << ", " << it->value;
       }
     }
   }
 
-  os << ']';
+  ss << ']';
 
-  return os.str();
+  return ss.str();
 }
