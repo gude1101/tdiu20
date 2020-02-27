@@ -94,9 +94,4 @@ TEST_CASE("Copy") {
   CHECK(sl3.to_string() == sl2.to_string());
 }
 
-TEST_CASE("Destructor") {
-  Sorted_list* sl = new Sorted_list{1, 6000, -200, 3};
-  delete sl;
-  CHECK(sl->is_empty());
-}
 #endif
