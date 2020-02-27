@@ -5,7 +5,10 @@
 
 class Sorted_list {
 private:
+
+
   struct Node {
+
   public:
     int value;
     Node* next;
@@ -54,7 +57,7 @@ public:
   // Kopiering.
   Sorted_list(Sorted_list const & that) noexcept;
   Sorted_list& operator=(Sorted_list const & that);
-  // Tilldelning.
+  // Flytt.
   Sorted_list(Sorted_list && that);
   Sorted_list& operator=(Sorted_list && that);
   // Destructor.

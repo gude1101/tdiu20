@@ -13,12 +13,9 @@ Sorted_list::Sorted_list(std::initializer_list<int> il) : _first{nullptr}, _sent
   _sentinel->next = nullptr;
   _sentinel->value = INT_MAX;
 
-  cerr<<"New list. ";
   for (int e : il) {
     add(e);
-    cerr << "List is now: " << to_string() << ". ";
   }
-  cerr<<"New list done. ";
 }
 
 int* Sorted_list::Node::value_or_null(Node* n) {
@@ -77,15 +74,17 @@ void Sorted_list::update_first() {
 
 void Sorted_list::Node::connect(Sorted_list::Node* a, Sorted_list::Node* b) {
   // Garantera storleksordning.
-  if (b != nullptr && (a == nullptr || a->value <= b->value)) {
-    if (a != nullptr) {
-      a->next = b;
-    }
-    if (b != nullptr) {
-      b->previous = a;
-    }
-  } else {
+  if (b == nullptr || (a != nullptr && a->value > b->value)) {
     connect(b, a);
+
+    return;
+  }
+
+  if (a != nullptr) {
+    a->next = b;
+  }
+  if (b != nullptr) {
+    b->previous = a;
   }
 }
 
@@ -126,15 +125,11 @@ void Sorted_list::add(int n) {
   }
   for (auto it = _first;; it = it->next) {
     if (it->value > n || it == _sentinel) {
-      cerr << n <<  " < " << it-> value << ". ";
       insert(n, it, it->previous);
-      cerr << "Add done. ";
 
       return;
     }
-    cerr << n << " > " << it->value << ". ";
   }
-  cerr << "Error. ";
 }
 
 void Sorted_list::remove(int n) {
@@ -182,9 +177,7 @@ int Sorted_list::size() const {
 }
 
 std::ostream& operator<<(ostream& os, Sorted_list sl) {
-  cerr << "\nA";
   os << sl.to_string();
-  cerr << "\nB";
   return os;
 }
 
