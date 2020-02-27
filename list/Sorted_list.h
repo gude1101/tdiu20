@@ -53,8 +53,10 @@ public:
   Sorted_list(std::initializer_list<int> l);
   // Kopiering.
   Sorted_list(Sorted_list const & that) noexcept;
-  // Tilldelning.
   Sorted_list& operator=(Sorted_list const & that);
+  // Tilldelning.
+  Sorted_list(Sorted_list && that);
+  Sorted_list& operator=(Sorted_list && that);
   // Destructor.
   ~Sorted_list();
 

@@ -94,4 +94,17 @@ TEST_CASE("Copy") {
   CHECK(sl3.to_string() == sl2.to_string());
 }
 
+TEST_CASE("Move") {
+  Sorted_list sl1{1, 6000, -200, 3};
+  string sl1_before_move = sl1.to_string();
+  Sorted_list sl2{50, 235, 8568, -2345, 5467};
+  sl2 = sl1;
+  CHECK(sl2.to_string() == sl1_before_move);
+}
+
+/*TEST_CASE("Destructor") {
+  Sorted_list* sl = new Sorted_list{1, 6000, -200, 3};
+  delete sl;
+  CHECK(sl->is_empty());
+}*/
 #endif
