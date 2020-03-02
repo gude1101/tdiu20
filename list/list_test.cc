@@ -58,7 +58,6 @@ TEST_CASE("Indexing") {
 }
 
 TEST_CASE("Out of range exception") {
-  cerr << "\nTesting exceptions. ";
     Sorted_list sl{1, 6000, -200, 3};
     CHECK_THROWS(sl[4]);
     CHECK_THROWS(sl[-1]);
@@ -67,28 +66,19 @@ TEST_CASE("Out of range exception") {
 }
 
 TEST_CASE("OStream") {
-  cerr << "\nTesting OStream. ";
-
   Sorted_list sl{1, 6000, -200, 3};
-  cerr << "\nConstructed. ";
   stringstream ss{};
 
   ss << "test " << sl << 3.14;
-  cerr << "\nStreamed. ";
 
   CHECK(ss.str() == "test [-200, 1, 3, 6000]3.14");
-  cerr << "Checked. ";
 }
 
 TEST_CASE("Copy") {
-  cerr << "\nTesting copying. ";
-
-  cerr << "Constructor. ";
   Sorted_list sl1{1, 6000, -200, 3};
   Sorted_list sl2{sl1};
   CHECK(sl1.to_string() == sl2.to_string());
 
-  cerr << "Operator. ";
   Sorted_list sl3{};
   sl3 = sl2;
   CHECK(sl3.to_string() == sl2.to_string());
@@ -98,7 +88,7 @@ TEST_CASE("Move") {
   Sorted_list sl1{1, 6000, -200, 3};
   string sl1_before_move = sl1.to_string();
   Sorted_list sl2{50, 235, 8568, -2345, 5467};
-  sl2 = sl1;
+  sl2 = std::move(sl1);
   CHECK(sl2.to_string() == sl1_before_move);
 }
 

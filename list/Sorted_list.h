@@ -14,10 +14,11 @@ private:
     Node* next;
     Node* previous;
 
-    //Node(int val);
-
     // static pga n kan vara nullptr
+    // returnerar nullptr om n är nullptr
     static int* value_or_null(Node* n);
+
+    static bool is_in_order(Node* a, Node* b);
 
     // länkar ihop 2 noder
     static void connect(Node* a, Node* b);
@@ -58,8 +59,8 @@ public:
   Sorted_list(Sorted_list const & that) noexcept;
   Sorted_list& operator=(Sorted_list const & that);
   // Flytt.
-  Sorted_list(Sorted_list && that);
-  Sorted_list& operator=(Sorted_list && that);
+  //Sorted_list(Sorted_list && that);
+  //Sorted_list& operator=(Sorted_list && that);
   // Destructor.
   ~Sorted_list();
 

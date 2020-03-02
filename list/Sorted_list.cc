@@ -6,7 +6,6 @@ using namespace std;
 #define INT_MAX 2147483647
 #endif
 
-// TODO: ta bort alla cerr<< när buggar är fixade
 
 Sorted_list::Sorted_list(std::initializer_list<int> il) : _first{nullptr}, _sentinel{new Node{}} {
   _sentinel->previous = _first;
@@ -49,6 +48,7 @@ Sorted_list& Sorted_list::operator=(Sorted_list const & that) {
 
 Sorted_list::~Sorted_list() {
   clear();
+  delete _sentinel; // OBS! Glöm inte! Här var minnesläckan.
 }
 
 
@@ -72,10 +72,20 @@ void Sorted_list::update_first() {
   }
 }
 
+bool Sorted_list::Node::is_in_order(Sorted_list::Node* a, Sorted_list::Node* b) {
+  if (b == nullptr) {
+    return false;
+  }
+  if (a == nullptr) {
+    return true;
+  }
+  return a->value <= b->value; // OBS! kan vara ==
+}
+
 void Sorted_list::Node::connect(Sorted_list::Node* a, Sorted_list::Node* b) {
   // Garantera storleksordning.
-  if (b == nullptr || (a != nullptr && a->value > b->value)) {
-    connect(b, a);
+  if (!is_in_order(a, b)) {
+    connect(b, a); // Byter ordning på a och b.
 
     return;
   }
@@ -90,19 +100,19 @@ void Sorted_list::Node::connect(Sorted_list::Node* a, Sorted_list::Node* b) {
 
 Sorted_list::Node* Sorted_list::insert(int n, Sorted_list::Node* a, Sorted_list::Node* b) {
   // Garantera storleksordning.
-  if (b != nullptr && (a == nullptr || a->value <= b->value)) {
-    Sorted_list::Node* nn = new Node{};
-    nn->value = n;
-
-    Node::connect(a, nn);
-    Node::connect(nn, b);
-
-    update_first();
-
-    return nn;
-  } else {
-    return insert(n, b, a);
+  if (!Node::is_in_order(a, b)) {
+    return insert(n, b, a); // Byter ordning på a och b.
   }
+
+  Sorted_list::Node* nn = new Node{};
+  nn->value = n;
+
+  Node::connect(a, nn);
+  Node::connect(nn, b);
+
+  update_first();
+
+  return nn;
 }
 
 bool Sorted_list::contains(int n) {
@@ -115,9 +125,7 @@ bool Sorted_list::contains(int n) {
 }
 
 void Sorted_list::add(int n) {
-  cerr<<"Adding "<<n<<". ";
   if (is_empty()) {
-    cerr << "It is first. ";
     _first = insert(n, nullptr, _sentinel);
 
     // Ingen loop krävs.
