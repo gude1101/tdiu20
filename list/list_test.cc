@@ -74,7 +74,7 @@ TEST_CASE("OStream") {
   CHECK(ss.str() == "test [-200, 1, 3, 6000]3.14");
 }
 
-/*TEST_CASE("Copy") {
+TEST_CASE("Copy") {
   Sorted_list sl1{1, 6000, -200, 3};
   Sorted_list sl2{sl1};
   CHECK(sl1.to_string() == sl2.to_string());
@@ -82,11 +82,19 @@ TEST_CASE("OStream") {
   Sorted_list sl3{};
   sl3 = sl2;
   CHECK(sl3.to_string() == sl2.to_string());
-}*/
+}
 
-TEST_CASE("Destructor") {
+TEST_CASE("Move") {
+  Sorted_list sl1{1, 6000, -200, 3};
+  string sl1_before_move = sl1.to_string();
+  Sorted_list sl2{50, 235, 8568, -2345, 5467};
+  sl2 = std::move(sl1);
+  CHECK(sl2.to_string() == sl1_before_move);
+}
+
+/*TEST_CASE("Destructor") {
   Sorted_list* sl = new Sorted_list{1, 6000, -200, 3};
   delete sl;
-  CHECK(sl == nullptr);
-}
+  CHECK(sl->is_empty());
+}*/
 #endif

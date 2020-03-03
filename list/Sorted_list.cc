@@ -26,27 +26,31 @@ int* Sorted_list::Node::value_or_null(Node* n) {
 }
 
 //Sorted_list::Node::Node(int val) : value{val}, next{nullptr}, previous{nullptr} {}
-/*
+
 Sorted_list::Node* Sorted_list::Node::new_sentinel() {
-  return new Node(INT_MAX);
+  Node* n = new Node{};
+  n->value = INT_MAX;
+  return n;
 }
 
-Sorted_list::Sorted_list(Sorted_list const & that) : _first{nullptr}, _sentinel{Node::new_sentinel()} {
+Sorted_list::Sorted_list(Sorted_list const & that) noexcept : _first{nullptr}, _sentinel{Node::new_sentinel()} {
   *this = that;
 }
 
-Sorted_list& Sorted_list::operator=(Sorted_list that) {
+Sorted_list& Sorted_list::operator=(Sorted_list const & that) {
   clear();
   for (int i = 0; i < that.size(); i++) {
     add(that[i]);
   }
 
   return *this;
-}*/
+}
 
 Sorted_list::~Sorted_list() {
   clear();
+  delete _sentinel; // OBS! Glöm inte! Här var minnesläckan.
 }
+
 
 int* Sorted_list::first() {
   return Node::value_or_null(_first);
@@ -62,39 +66,53 @@ bool Sorted_list::is_empty() {
 
 void Sorted_list::update_first() {
   // loop backwards
-  for (Node* n = _sentinel; n != nullptr; n = n->previous) {
+  _first = nullptr;
+  for (Node* n = _sentinel->previous; n != nullptr; n = n->previous) {
     _first = n;
   }
 }
 
+bool Sorted_list::Node::is_in_order(Sorted_list::Node* a, Sorted_list::Node* b) {
+  if (b == nullptr) {
+    return false;
+  }
+  if (a == nullptr) {
+    return true;
+  }
+  return a->value <= b->value; // OBS! kan vara ==
+}
+
 void Sorted_list::Node::connect(Sorted_list::Node* a, Sorted_list::Node* b) {
   // Garantera storleksordning.
-  if (b != nullptr && (a == nullptr || a->value <= b->value)) {
-    if (a != nullptr) {
-      a->next = b;
-    }
-    if (b != nullptr) {
-      b->previous = a;
-    }
-  } else {
-    connect(b, a);
+  if (!is_in_order(a, b)) {
+    connect(b, a); // Byter ordning på a och b.
+
+    return;
+  }
+
+  if (a != nullptr) {
+    a->next = b;
+  }
+  if (b != nullptr) {
+    b->previous = a;
   }
 }
 
 Sorted_list::Node* Sorted_list::insert(int n, Sorted_list::Node* a, Sorted_list::Node* b) {
   // Garantera storleksordning.
-  if (b != nullptr && (a == nullptr || a->value <= b->value)) {
-    Sorted_list::Node* nn = new Node{n};
-
-    Node::connect(a, nn);
-    Node::connect(nn, b);
-
-    update_first();
-
-    return nn;
-  } else {
-    return insert(n, b, a);
+  if (!Node::is_in_order(a, b)) {
+    return insert(n, b, a); // Byter ordning på a och b.
   }
+
+  Sorted_list::Node* nn = new Node{};
+  nn->value = n;
+
+  Node::connect(a, nn);
+  Node::connect(nn, b);
+
+  update_first();
+
+  return nn;
 }
 
 bool Sorted_list::contains(int n) {
@@ -147,7 +165,7 @@ void Sorted_list::clear() {
   }
 }
 
-int Sorted_list::operator[](int i) {
+int Sorted_list::operator[](int i) const {
   int j = 0;
   for (auto n = _first; n != _sentinel; n = n->next) {
     if (j++ == i) {
@@ -158,7 +176,7 @@ int Sorted_list::operator[](int i) {
   throw out_of_range{"i"};
 }
 
-int Sorted_list::size() {
+int Sorted_list::size() const {
   int i{};
   for (auto it = _first; it != _sentinel; it = it->next) {
     i++;
@@ -172,22 +190,22 @@ std::ostream& operator<<(ostream& os, Sorted_list sl) {
 }
 
 string Sorted_list::to_string() {
-  stringstream os{};
+  stringstream ss{};
 
-  os << '[';
+  ss << '[';
 
   if (!is_empty()) {
-    os << *first();
+    ss << *first();
     bool one_element = first() == last();
     // Bara kommatecken om fler än ett element
     if (!one_element) {
       for (auto it = _first->next; it != _sentinel; it = it->next) {
-        os << ", " << it->value;
+        ss << ", " << it->value;
       }
     }
   }
 
-  os << ']';
+  ss << ']';
 
-  return os.str();
+  return ss.str();
 }
