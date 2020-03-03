@@ -6,19 +6,15 @@ using namespace std;
 #define INT_MAX 2147483647
 #endif
 
-// TODO: ta bort alla cerr<< när buggar är fixade
 
 Sorted_list::Sorted_list(std::initializer_list<int> il) : _first{nullptr}, _sentinel{new Node{}} {
   _sentinel->previous = _first;
   _sentinel->next = nullptr;
   _sentinel->value = INT_MAX;
 
-  cerr<<"New list. ";
   for (int e : il) {
     add(e);
-    cerr << "List is now: " << to_string() << ". ";
   }
-  cerr<<"New list done. ";
 }
 
 int* Sorted_list::Node::value_or_null(Node* n) {
@@ -111,9 +107,7 @@ bool Sorted_list::contains(int n) {
 }
 
 void Sorted_list::add(int n) {
-  cerr<<"Adding "<<n<<". ";
   if (is_empty()) {
-    cerr << "It is first. ";
     _first = insert(n, nullptr, _sentinel);
 
     // Ingen loop krävs.
@@ -121,15 +115,11 @@ void Sorted_list::add(int n) {
   }
   for (auto it = _first;; it = it->next) {
     if (it->value > n || it == _sentinel) {
-      cerr << n <<  " < " << it-> value << ". ";
       insert(n, it, it->previous);
-      cerr << "Add done. ";
 
       return;
     }
-    cerr << n << " > " << it->value << ". ";
   }
-  cerr << "Error. ";
 }
 
 void Sorted_list::remove(int n) {
