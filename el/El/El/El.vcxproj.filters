@@ -15,13 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="list_test.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="test_main.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Implementation.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="el_test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
