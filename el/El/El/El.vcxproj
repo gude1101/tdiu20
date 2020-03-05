@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Implementation.cc" />
-    <ClCompile Include="list_test.cc" />
+    <ClCompile Include="el_test.cc" />
     <ClCompile Include="test_main.cc" />
   </ItemGroup>
   <ItemGroup>
