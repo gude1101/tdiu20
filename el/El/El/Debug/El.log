@@ -1,4 +1,6 @@
-﻿  list_test.cc
+﻿  Implementation.cc
+D:\gusta\Documents\GitHub\tdiu20\el\El\El\Header.h(8,27): error C2065:  'Component': undeclared identifier
+  el_test.cc
   test_main.cc
   Generating Code...
-  El.vcxproj -> C:\Users\MindRoad\Documents\GitHub\tdiu20\el\El\Debug\El.exe
+D:\gusta\Documents\GitHub\tdiu20\el\El\El\Header.h(8,37): error C2059:  syntax error: '>'
