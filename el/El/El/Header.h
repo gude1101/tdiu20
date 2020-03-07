@@ -5,8 +5,6 @@
 #include <iostream>
 #include <stdexcept>
 
-void simulate(std::vector<Component*> net, int iterations, double voltage, double delta_t);
-
 class Connection {
 public:
 	double Potential = 0;
@@ -26,7 +24,9 @@ public:
 	double get_voltage();
 };
 
-std::ostream operator<<(std::ostream & os, Component & c);
+void simulate(std::vector<Component*> net, int iterations, double voltage, double delta_t);
+
+std::ostream& operator<<(std::ostream & os, Component & c);
 
 class Battery : public Component {
 public:

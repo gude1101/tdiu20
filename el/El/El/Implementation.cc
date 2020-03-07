@@ -2,17 +2,39 @@
 
 using namespace std;
 
+void simulate(vector<Component*> net, int iterations, int prints, double delta_t) {
+	for (int i = 0; i < iterations; i++ ) {
+		for (auto c : net) {
+			c->simulate(delta_t);
+		}
+	}
+}
+
+
 Component::Component(std::string name, double special_val, Connection from, Connection to)
 	: _name{ name }, _special_val{ special_val }, _from{ from }, _to{ to } {}
 
-double Component::get_voltage() {
-	return _from.Potential - _to.Potential;
+void move_potential(double amount, Connection& a, Connection& b) {
+	if (a.Potential > b.Potential) {
+		move_potential(amount, b, a);
+
+		return;
+	}
+	a.Potential += amount;
+	b.Potential -= amount;
 }
 
-ostream operator<<(ostream& os, Component& c) {
+
+double Component::get_voltage() {
+	return abs(_from.Potential - _to.Potential);
+}
+
+ostream& operator<<(ostream& os, Component& c) {
 	os
 		<< cout.width(5) << cout.precision(2)
 		<< c.get_voltage() << " " << c.get_current();
+
+	return os;
 }
 
 
@@ -31,12 +53,7 @@ double Resistor::get_current() {
 }
 
 void Resistor::simulate(double delta_t) {
-	double x = _to.Potential - _from.Potential;
-	x /= _special_val;
-	x *= delta_t;
-
-	_to.Potential += x;
-	_from.Potential -= x;
+	move_potential(get_voltage() * delta_t, _from, _to);
 }
 
 
@@ -46,7 +63,6 @@ double Capacitor::get_current() {
 
 void Capacitor::simulate(double delta_t) {
 	double x = get_current() * delta_t;
-	_from.Potential -= x;
+	move_potential(x, _from, _to);
 	_charge += x;
-	_to.Potential += x;
 }

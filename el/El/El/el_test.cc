@@ -3,7 +3,7 @@
 #include <sstream>
 
 #include "catch.hpp"
-//#include ".h"
+#include "header.h"
 
 using namespace std;
 
@@ -17,8 +17,40 @@ using namespace std;
 
 #if 01
 
-TEST_CASE("Empty constructor")
+TEST_CASE("Voltage") {
+	Connection a{};
+	Connection b{};
+	a.Potential = -2;
+	b.Potential = 3.5;
+
+	Resistor* r = new Resistor("", 1, a, b);
+
+	CHECK(r->get_voltage() == 5.5);
+
+	delete r;
+}
+
+TEST_CASE("Battery")
 {
-	CHECK(2-1 == 1);
+	Connection a{};
+	Connection b{};
+
+	vector<Component*> net{};
+
+	Battery* bat = new Battery{ "bat", 10, a, b };
+
+	CHECK(a.Potential == 0);
+	CHECK(b.Potential == 0);
+	CHECK(bat->get_current() == 0);
+	CHECK(bat->get_voltage() == 0);
+
+	bat->simulate(0.5);
+
+	CHECK(a.Potential == 0);
+	CHECK(b.Potential == 10);
+	CHECK(bat->get_current() == 0);
+	CHECK(bat->get_voltage() == 10);
+
+	delete bat;
 }
 #endif
