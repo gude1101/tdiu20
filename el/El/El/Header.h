@@ -14,8 +14,8 @@ class Component {
 protected:
 	std::string _name;
 	double _special_val;
-	Connection _from;
-	Connection _to;
+	Connection& _from;
+	Connection& _to;
 public:
 	Component(std::string name, double special_val, Connection from, Connection to);
 
