@@ -30,8 +30,7 @@ TEST_CASE("Voltage") {
 	delete r;
 }
 
-TEST_CASE("Battery")
-{
+TEST_CASE("Battery") {
 	Connection a{};
 	Connection b{};
 
@@ -52,5 +51,54 @@ TEST_CASE("Battery")
 	CHECK(bat->get_voltage() == 10);
 
 	delete bat;
+}
+
+TEST_CASE("Resistor") {
+	Connection a{};
+	Connection b{};
+
+	Battery* bat = new Battery{ "bat", 10, a, b };
+
+	CHECK(a.Potential == 0);
+	CHECK(b.Potential == 0);
+	CHECK(bat->get_current() == 0);
+	CHECK(bat->get_voltage() == 0);
+
+	bat->simulate(0.5);
+
+	CHECK(a.Potential == 0);
+	CHECK(b.Potential == 10);
+	CHECK(bat->get_current() == 0);
+	CHECK(bat->get_voltage() == 10);
+
+	delete bat;
+}
+
+TEST_CASE("Capacitor") {
+	Connection a{};
+	Connection b{};
+	a.Potential = 5;
+	b.Potential = 9;
+
+	Capacitor* x = new Capacitor{ "component", 0.8, 0, a, b };
+
+	CHECK(a.Potential == 5);
+	CHECK(b.Potential == 9);
+	CHECK(x->get_current() == 2);
+	CHECK(x->get_voltage() == 4);
+
+	x->simulate(0.1);
+
+	CHECK(a.Potential == 5.8);
+	CHECK(b.Potential == 8.2);
+	CHECK(x->_charge == 0.8);
+	CHECK(x->get_current() == 1.28);
+	CHECK(x->get_voltage() == 2.4);
+
+	delete x;
+}
+
+TEST_CASE("Circuit") {
+
 }
 #endif

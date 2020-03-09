@@ -14,10 +14,10 @@ class Component {
 protected:
 	std::string _name;
 	double _special_val;
-	Connection _from;
-	Connection _to;
+	Connection & _from;
+	Connection & _to;
 public:
-	Component(std::string name, double special_val, Connection from, Connection to);
+	Component(std::string name, double special_val, Connection & from, Connection & to);
 
 	virtual void simulate(double delta_t) = 0;
 	virtual double get_current() = 0;
@@ -43,10 +43,11 @@ public:
 };
 
 class Capacitor : public Component {
-private:
-	double _charge;
 public:
-	using Component::Component;
+	double _charge;
+	
+	Capacitor(std::string name, double capacitance, double charge, Connection& from, Connection& to);
+
 	void simulate(double delta_t);
 	double get_current();
 };
