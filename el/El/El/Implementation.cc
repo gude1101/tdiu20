@@ -2,8 +2,37 @@
 
 using namespace std;
 
+void print_top(vector<Component*> net) {
+	for (auto c : net) {
+		for (int i = 0; i <= 11 - c->get_name().length(); i++) {
+			std::cout << ' ';
+		}
+		std::cout << c->get_name();
+	}
+	std::cout << '\n';
+	for (auto c : net) {
+		cout << " Volt Curr";
+	}
+	std::cout << '\n';
+}
+
+void print(vector<Component*> net) {
+	for (auto c : net) {
+		std::cout << c;
+	}
+	std::cout << "\n";
+}
+
 void simulate(vector<Component*> net, int iterations, int prints, double delta_t) {
+	print_top(net);
+
+	int j = 0;
 	for (int i = 0; i < iterations; i++ ) {
+		if ((iterations / prints) * j >= i) {
+			j++;
+			print(net);
+		}
+
 		for (auto c : net) {
 			c->simulate(delta_t);
 		}
@@ -53,7 +82,7 @@ double Resistor::get_current() {
 }
 
 void Resistor::simulate(double delta_t) {
-	move_potential(get_voltage() * delta_t, _from, _to);
+	move_potential(get_current() * delta_t, _from, _to);
 }
 
 

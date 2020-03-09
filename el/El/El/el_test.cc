@@ -56,22 +56,17 @@ TEST_CASE("Battery") {
 TEST_CASE("Resistor") {
 	Connection a{};
 	Connection b{};
+	a.Potential = 5;
+	b.Potential = 9;
 
-	Battery* bat = new Battery{ "bat", 10, a, b };
+	Resistor* x = new Resistor{ "res", 2, a, b };
 
-	CHECK(a.Potential == 0);
-	CHECK(b.Potential == 0);
-	CHECK(bat->get_current() == 0);
-	CHECK(bat->get_voltage() == 0);
+	CHECK(x->get_current() == 4 / 2);
+	
+	x->simulate(0.1);
 
-	bat->simulate(0.5);
-
-	CHECK(a.Potential == 0);
-	CHECK(b.Potential == 10);
-	CHECK(bat->get_current() == 0);
-	CHECK(bat->get_voltage() == 10);
-
-	delete bat;
+	CHECK(a.Potential == 5 + (4.0/2.0)*0.1);
+	CHECK(b.Potential == 9 - (4.0/2.0)*0.1);
 }
 
 TEST_CASE("Capacitor") {
@@ -80,20 +75,15 @@ TEST_CASE("Capacitor") {
 	a.Potential = 5;
 	b.Potential = 9;
 
-	Capacitor* x = new Capacitor{ "component", 0.8, 0, a, b };
+	Capacitor* x = new Capacitor{ "component", 0.8, 3, a, b };
 
-	CHECK(a.Potential == 5);
-	CHECK(b.Potential == 9);
-	CHECK(x->get_current() == 2);
-	CHECK(x->get_voltage() == 4);
+	CHECK(x->get_current() == 0.8);
 
 	x->simulate(0.1);
 
-	CHECK(a.Potential == 5.8);
-	CHECK(b.Potential == 8.2);
-	CHECK(x->_charge == 0.8);
-	CHECK(x->get_current() == 1.28);
-	CHECK(x->get_voltage() == 2.4);
+	CHECK(a.Potential == 5 + (0.8 * (4.0 - 3.0) * 0.1));
+	CHECK(b.Potential == 9 - (0.8 * (4.0 - 3.0) * 0.1));
+	CHECK(x->_charge == 3 + (0.8 * (4.0 - 3.0) * 0.1));
 
 	delete x;
 }
