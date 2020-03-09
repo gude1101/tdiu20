@@ -11,7 +11,7 @@ void simulate(vector<Component*> net, int iterations, int prints, double delta_t
 }
 
 
-Component::Component(std::string name, double special_val, Connection from, Connection to)
+Component::Component(std::string name, double special_val, Connection& from, Connection& to)
 	: _name{ name }, _special_val{ special_val }, _from{ from }, _to{ to } {}
 
 void move_potential(double amount, Connection& a, Connection& b) {
@@ -56,6 +56,9 @@ void Resistor::simulate(double delta_t) {
 	move_potential(get_voltage() * delta_t, _from, _to);
 }
 
+
+Capacitor::Capacitor(std::string name, double capacitance, double charge, Connection& from, Connection& to)
+	: Component::Component(name, capacitance, from, to), _charge{ charge } {}
 
 double Capacitor::get_current() {
 	return _special_val * (get_voltage() - _charge);
