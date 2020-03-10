@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Implementation.cc" />
     <ClCompile Include="el_test.cc" />
+    <ClCompile Include="run_example_main.cc" />
     <ClCompile Include="test_main.cc" />
   </ItemGroup>
   <ItemGroup>

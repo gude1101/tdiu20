@@ -1,10 +1,12 @@
+#pragma once
+
 #include "Header.h"
 
 using namespace std;
 
 void print_top(vector<Component*> net) {
 	for (auto c : net) {
-		for (int i = 0; i <= 11 - c->get_name().length(); i++) {
+		for (uint32_t i = 0; i <= 11 - c->get_name().length(); i++) {
 			std::cout << ' ';
 		}
 		std::cout << c->get_name();
@@ -23,12 +25,20 @@ void print(vector<Component*> net) {
 	std::cout << "\n";
 }
 
-void simulate(vector<Component*> net, int iterations, int prints, double delta_t) {
+void simulate(vector<Component*> net, int iterations, int prints, double battery_voltage, double delta_t) {
 	print_top(net);
+
+	// set battery voltage
+	for (auto c : net) {
+		Battery* bat = dynamic_cast<Battery*> (c);
+		if (bat != nullptr) {
+			bat->_voltage = battery_voltage;
+		}
+	}
 
 	int j = 0;
 	for (int i = 0; i < iterations; i++ ) {
-		if ((iterations / prints) * j >= i) {
+		if ((iterations / prints) * j <= i) {
 			j++;
 			print(net);
 		}
@@ -38,10 +48,6 @@ void simulate(vector<Component*> net, int iterations, int prints, double delta_t
 		}
 	}
 }
-
-
-Component::Component(std::string name, double special_val, Connection& from, Connection& to)
-	: _name{ name }, _special_val{ special_val }, _from{ from }, _to{ to } {}
 
 void move_potential(double amount, Connection& a, Connection& b) {
 	if (a.Potential > b.Potential) {
@@ -54,8 +60,15 @@ void move_potential(double amount, Connection& a, Connection& b) {
 }
 
 
+Component::Component(std::string name, Connection& from, Connection& to)
+	: _name{ name }, _from{ from }, _to{ to } {}
+
 double Component::get_voltage() {
 	return abs(_from.Potential - _to.Potential);
+}
+
+std::string Component::get_name() {
+	return _name;
 }
 
 ostream& operator<<(ostream& os, Component& c) {
@@ -71,14 +84,17 @@ double Battery::get_current() {
 	return 0;
 }
 
-void Battery::simulate(double delta_t) {
+void Battery::simulate(double delta_t = 0) {
 	_from.Potential = 0;
-	_to.Potential = _special_val;
+	_to.Potential = _voltage;
 }
 
 
+Resistor::Resistor(std::string name, double resistance, Connection& from, Connection& to)
+	: Component::Component(name, from, to), _resistance{ resistance } {}
+
 double Resistor::get_current() {
-	return get_voltage() / _special_val;
+	return get_voltage() / _resistance;
 }
 
 void Resistor::simulate(double delta_t) {
@@ -87,10 +103,10 @@ void Resistor::simulate(double delta_t) {
 
 
 Capacitor::Capacitor(std::string name, double capacitance, double charge, Connection& from, Connection& to)
-	: Component::Component(name, capacitance, from, to), _charge{ charge } {}
+	: Component::Component(name, from, to), _capacitance{ capacitance }, _charge{ charge } {}
 
 double Capacitor::get_current() {
-	return _special_val * (get_voltage() - _charge);
+	return _capacitance * (get_voltage() - _charge);
 }
 
 void Capacitor::simulate(double delta_t) {

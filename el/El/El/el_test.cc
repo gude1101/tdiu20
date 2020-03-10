@@ -1,3 +1,5 @@
+#if 0
+
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -91,4 +93,6 @@ TEST_CASE("Capacitor") {
 TEST_CASE("Circuit") {
 
 }
+#endif
+
 #endif
