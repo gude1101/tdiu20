@@ -1,12 +1,15 @@
 #pragma once
 
+#ifndef Implementation
+#define Implementation
+
 #include "Header.h"
 
 using namespace std;
 
-void print_top(vector<Component*> net) {
+void print_top(vector<Component*> & net) {
 	for (auto c : net) {
-		for (uint32_t i = 0; i <= 11 - c->get_name().length(); i++) {
+		for (uint32_t i = 0; i <= 9 - c->get_name().length(); i++) {
 			std::cout << ' ';
 		}
 		std::cout << c->get_name();
@@ -18,14 +21,14 @@ void print_top(vector<Component*> net) {
 	std::cout << '\n';
 }
 
-void print(vector<Component*> net) {
+void print(vector<Component*> & net) {
 	for (auto c : net) {
 		std::cout << c;
 	}
 	std::cout << "\n";
 }
 
-void simulate(vector<Component*> net, int iterations, int prints, double battery_voltage, double delta_t) {
+void simulate(vector<Component*> & net, int iterations, int prints, double battery_voltage, double delta_t) {
 	print_top(net);
 
 	// set battery voltage
@@ -114,3 +117,5 @@ void Capacitor::simulate(double delta_t) {
 	move_potential(x, _from, _to);
 	_charge += x;
 }
+
+#endif

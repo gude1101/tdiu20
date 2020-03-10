@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef Header
+#define Header
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -25,7 +28,7 @@ public:
 	std::string get_name();
 };
 
-void simulate(std::vector<Component*> net, int iterations, int prints, double battery_voltage, double delta_t);
+void simulate(std::vector<Component*> & net, int iterations, int prints, double battery_voltage, double delta_t);
 
 std::ostream& operator<<(std::ostream & os, Component & c);
 
@@ -59,3 +62,5 @@ public:
 	void simulate(double delta_t);
 	double get_current();
 };
+
+#endif

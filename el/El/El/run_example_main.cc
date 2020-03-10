@@ -3,7 +3,7 @@
 
 using namespace std;
 
-vector<Component*> example_1() {
+vector<Component*> & example_1() {
 	Connection P{};
 	Connection N{};
 	Connection Q_124{};
@@ -20,18 +20,27 @@ vector<Component*> example_1() {
 }
 
 int main(int argc, char* argv[]) {
-	stringstream ss{};
-	for (int i = 0; i < argc; i++) {
-		ss << *(argv[i]);
-	}
 	int iterations;
-	ss >> iterations;
 	int prints;
-	ss >> prints;
 	double delta_t;
-	ss >> delta_t;
 	double bat_voltage;
-	ss >> bat_voltage;
+
+	if (argc > 0 && false) {
+		stringstream ss{};
+		for (int i = 0; i < argc; i++) {
+			ss << *(argv[i]);
+		}
+		ss >> iterations;
+		ss >> prints;
+		ss >> delta_t;
+		ss >> bat_voltage;
+	}
+	else {
+		iterations = 200000;
+		prints = 10;
+		delta_t = 0.01;
+		bat_voltage = 24;
+	}
 
 	auto x = example_1();
 
