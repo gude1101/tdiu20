@@ -22,6 +22,8 @@ public:
 	virtual void simulate(double delta_t) = 0;
 	virtual double get_current() = 0;
 	double get_voltage();
+
+	std::string get_name();
 };
 
 void simulate(std::vector<Component*> net, int iterations, double voltage, double delta_t);
