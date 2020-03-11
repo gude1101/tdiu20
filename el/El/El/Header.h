@@ -34,9 +34,11 @@ std::ostream& operator<<(std::ostream & os, Component & c);
 
 class Battery : public Component {
 public:
-	double _voltage;
+	double _voltage = 0;
 
 	using Component::Component;
+	Battery(std::string name, double voltage, Connection& from, Connection& to);
+
 	void simulate(double delta_t);
 	double get_current();
 };

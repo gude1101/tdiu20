@@ -23,7 +23,7 @@ void print_top(vector<Component*> & net) {
 
 void print(vector<Component*> & net) {
 	for (auto c : net) {
-		std::cout << c;
+		std::cout << *c;
 	}
 	std::cout << "\n";
 }
@@ -82,6 +82,9 @@ ostream& operator<<(ostream& os, Component& c) {
 	return os;
 }
 
+
+Battery::Battery(std::string name, double voltage, Connection& from, Connection& to)
+	: Component::Component(name, from, to), _voltage{ voltage } {}
 
 double Battery::get_current() {
 	return 0;
