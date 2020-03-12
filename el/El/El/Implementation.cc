@@ -4,24 +4,26 @@
 #define Implementation
 
 #include "Header.h"
+#include <iomanip>
 
 using namespace std;
 
 void print_top(vector<Component*> & net) {
 	for (auto c : net) {
-		for (uint32_t i = 0; i <= 9 - c->get_name().length(); i++) {
+		for (uint32_t i = 0; i <= 11 - c->get_name().length(); i++) {
 			std::cout << ' ';
 		}
 		std::cout << c->get_name();
 	}
 	std::cout << '\n';
 	for (auto c : net) {
-		cout << " Volt Curr";
+		cout << "  Volt  Curr";
 	}
 	std::cout << '\n';
 }
 
 void print(vector<Component*> & net) {
+	std::cout << " ";
 	for (auto c : net) {
 		std::cout << *c;
 	}
@@ -76,8 +78,11 @@ std::string Component::get_name() {
 
 ostream& operator<<(ostream& os, Component& c) {
 	os
-		<< cout.width(5) << cout.precision(2)
-		<< c.get_voltage() << " " << c.get_current();
+		<< std::setfill(' ') << std::setw(5) << std::right << std::fixed << std::setprecision(2)
+		<< c.get_voltage()
+		<< " "
+		<< std::setfill(' ') << std::setw(5) << std::right << std::fixed << std::setprecision(2)
+		<< c.get_current() << " ";
 
 	return os;
 }

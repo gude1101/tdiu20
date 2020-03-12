@@ -1,4 +1,4 @@
-﻿  Implementation.cc
+﻿  run_example_main.cc
 LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/FORCE' specification
 run_example_main.obj : warning LNK4006: "public: __thiscall Battery::Battery(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,double,class Connection &,class Connection &)" (??0Battery@@QAE@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@NAAVConnection@@1@Z) already defined in Implementation.obj; second definition ignored
 run_example_main.obj : warning LNK4006: "public: __thiscall Capacitor::Capacitor(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,double,double,class Connection &,class Connection &)" (??0Capacitor@@QAE@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@NNAAVConnection@@1@Z) already defined in Implementation.obj; second definition ignored
