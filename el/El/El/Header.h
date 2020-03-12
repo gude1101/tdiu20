@@ -1,40 +1,68 @@
 #pragma once
 
+#ifndef Header
+#define Header
+
 #include <vector>
 #include <string>
 #include <iostream>
 #include <stdexcept>
 
-void simulate(std::vector<Component*> net, int iterations, double voltage, double delta_t);
-
 class Connection {
 public:
-	double Potential;
+	double Potential = 0;
 };
 
 class Component {
 protected:
 	std::string _name;
-	double _special_val;
-	Connection _from;
-	Connection _to;
+	Connection & _from;
+	Connection & _to;
 public:
-	Component(std::string name, double special_val, Connection from, Connection to);
+	Component(std::string name, Connection & from, Connection & to);
 
-	virtual void simulate() = 0; // abstract
+	virtual void simulate(double delta_t) = 0;
+	virtual double get_current() = 0;
+	double get_voltage();
+
+	std::string get_name();
 };
 
+void simulate(std::vector<Component*> & net, int iterations, int prints, double battery_voltage, double delta_t);
+
+std::ostream& operator<<(std::ostream & os, Component & c);
+
 class Battery : public Component {
+public:
+	double _voltage = 0;
+
 	using Component::Component;
-	void simulate();
+	Battery(std::string name, double voltage, Connection& from, Connection& to);
+
+	void simulate(double delta_t);
+	double get_current();
 };
 
 class Resistor : public Component {
-	using Component::Component;
-	void simulate();
+protected:
+	double _resistance;
+public:
+	Resistor(std::string name, double resistance, Connection& from, Connection& to);
+
+	void simulate(double delta_t);
+	double get_current();
 };
 
 class Capacitor : public Component {
-	using Component::Component;
-	void simulate();
+protected:
+	double _capacitance;
+public:
+	double _charge;
+
+	Capacitor(std::string name, double capacitance, double charge, Connection& from, Connection& to);
+
+	void simulate(double delta_t);
+	double get_current();
 };
+
+#endif

@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Implementation.cc" />
     <ClCompile Include="el_test.cc" />
+    <ClCompile Include="run_example_main.cc" />
     <ClCompile Include="test_main.cc" />
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +105,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
