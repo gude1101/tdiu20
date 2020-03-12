@@ -20,16 +20,17 @@ public:
 	}
 
 	simulation_params(int argc, char* argv[]) {
-		if (argc < 4) {
+		if (argc < 5) {
 			throw std::invalid_argument("Too few arguments.");
 		}
-		if (argc > 4) {
+		if (argc > 5) {
 			throw std::invalid_argument("Too many arguments.");
 		}
 
 		stringstream ss{};
-		for (int i = 0; i < argc; i++) {
-			ss << *(argv[i]);
+		// Ignore first argv
+		for (int i = 1; i < argc; i++) {
+			ss << argv[i] << " ";
 		}
 		ss >> iterations;
 		if (ss.fail()) {

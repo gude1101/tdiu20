@@ -18,5 +18,5 @@ run_example_main.obj : warning LNK4006: "public: virtual void __thiscall Battery
 run_example_main.obj : warning LNK4006: "public: virtual void __thiscall Capacitor::simulate(double)" (?simulate@Capacitor@@UAEXN@Z) already defined in Implementation.obj; second definition ignored
 run_example_main.obj : warning LNK4006: "public: virtual void __thiscall Resistor::simulate(double)" (?simulate@Resistor@@UAEXN@Z) already defined in Implementation.obj; second definition ignored
 test_main.obj : warning LNK4006: _main already defined in run_example_main.obj; second definition ignored
-D:\gusta\Documents\GitHub\tdiu20\el\El\Debug\El.exe : warning LNK4088: image being generated due to /FORCE option; image may not run
-  El.vcxproj -> D:\gusta\Documents\GitHub\tdiu20\el\El\Debug\El.exe
+C:\Users\MindRoad\Documents\GitHub\tdiu20\el\El\Debug\El.exe : warning LNK4088: image being generated due to /FORCE option; image may not run
+  El.vcxproj -> C:\Users\MindRoad\Documents\GitHub\tdiu20\el\El\Debug\El.exe
