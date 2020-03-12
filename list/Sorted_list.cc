@@ -33,7 +33,7 @@ Sorted_list::Node* Sorted_list::Node::new_sentinel() {
   return n;
 }
 
-Sorted_list::Sorted_list(Sorted_list const & that) noexcept : _first{nullptr}, _sentinel{Node::new_sentinel()} {
+Sorted_list::Sorted_list(Sorted_list const & that) : _first{nullptr}, _sentinel{Node::new_sentinel()} {
   *this = that;
 }
 
@@ -42,6 +42,22 @@ Sorted_list& Sorted_list::operator=(Sorted_list const & that) {
   for (int i = 0; i < that.size(); i++) {
     add(that[i]);
   }
+
+  return *this;
+}
+
+Sorted_list::Sorted_list(Sorted_list && that) : Sorted_list{} {
+  *this = std::move(that);
+}
+
+Sorted_list& Sorted_list::operator=(Sorted_list && that) {
+  Node* temp = _first;
+  _first = that._first;
+  that._first = temp;
+
+  temp = _sentinel;
+  _sentinel = that._sentinel;
+  that._sentinel = temp;
 
   return *this;
 }

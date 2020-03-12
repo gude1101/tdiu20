@@ -87,9 +87,13 @@ TEST_CASE("Copy") {
 TEST_CASE("Move") {
   Sorted_list sl1{1, 6000, -200, 3};
   string sl1_before_move = sl1.to_string();
+
   Sorted_list sl2{50, 235, 8568, -2345, 5467};
   sl2 = std::move(sl1);
   CHECK(sl2.to_string() == sl1_before_move);
+  
+  Sorted_list sl3{std::move(sl2)};
+  CHECK(sl3.to_string() == sl1_before_move);
 }
 
 /*TEST_CASE("Destructor") {
